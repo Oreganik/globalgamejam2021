@@ -60,3 +60,7 @@ crashlytics-build.properties
 
 # Mac OS files
 .DS_Store
+
+# Oculus Build Config (should be local to each install)
+Assets/Resources/OVRBuildConfig.asset
+Assets/Resources/OVRBuildConfig.asset.meta
