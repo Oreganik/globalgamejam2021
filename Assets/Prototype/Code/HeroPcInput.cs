@@ -66,17 +66,24 @@ namespace Prototype
 
 			RotateCamera();
 
+			if (Input.GetMouseButtonDown(2))
+			{
+				DebugUI.Instance.Toggle();
+			}
+
+			bool boost = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+
 			if (Input.GetMouseButton(1))
 			{
-				_heroMotion.Fly(_cameraTransform.forward);
+				_heroMotion.Fly(_cameraTransform.forward, boost);
 			}
 			else if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.Q))
 			{
-				_heroMotion.Land();
+				_heroMotion.Land(boost);
 			}
 			else if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.E))
 			{
-				_heroMotion.Lift();
+				_heroMotion.Lift(boost);
 			}
 			else
 			{

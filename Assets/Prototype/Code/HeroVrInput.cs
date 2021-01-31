@@ -5,6 +5,7 @@ using Jambox;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR;
 
 namespace Prototype
 {
@@ -13,54 +14,173 @@ namespace Prototype
 	/// </summary>
 	public class HeroVrInput : MonoBehaviour 
 	{
-		private const float DOT_FLY = 0.5f;
-		private const float DOT_LAND = 0.5f;
 
-		public Transform _leftHand;
-		public Transform _head;
-		public Transform _rightHand;
+		public static float Fly_MinDotProduct = 0.7f;
+		public static float Fly_MinDistanceHeadZ = 0.15f; // hands must be greater than this distance (6 inches) to trigger flight
+		public static float Land_MaxHeadZ = 0.1f; // so, "behind the head" is greater than zero to feel better
+		public static float Land_MaxDotProduct = 0.8f;
+		/// <summary>How far above the eyeline (i.e. the camera) the hand must be to trigger Lift</summary>
+		public static float Lift_AboveHeadDistance = 0.15f; // 0.1m = 4 inches
+		public static float MaxRotateSpeed = 30; // degrees per second
 
+		public Transform _leftTransform;
+		public Transform _headTransform;
+		public Transform _rightTransform;
+
+		private bool _controllersConfigured;
+		private bool _secondaryButtonDown;
+		private List<InputDevice> _controllers;
 		private HeroMotion _heroMotion;
+		private HeroVrHand _leftHand;
+		private HeroVrHand _rightHand;
 
-		protected void Update ()
+		private bool IsTryingToFly ()
 		{
-			// One hand above head: Lift
-			if (_leftHand.position.y > _head.position.y || _rightHand.position.y > _head.position.y)
+			if (_leftHand.DistanceHeadZ < Fly_MinDistanceHeadZ) return false;
+			if (_rightHand.DistanceHeadZ < Fly_MinDistanceHeadZ) return false;
+			if (_leftHand.DotProductHeadForward < Fly_MinDotProduct) return false;
+			if (_rightHand.DotProductHeadForward < Fly_MinDotProduct) return false;
+			return true;
+		}
+
+		private bool IsTryingToLand ()
+		{
+			if (_leftHand.DistanceHeadZ > Land_MaxHeadZ) return false;
+			if (_rightHand.DistanceHeadZ > Land_MaxHeadZ) return false;
+			if (_leftHand.DotProductDown > Land_MaxDotProduct) return false;
+			if (_rightHand.DotProductDown > Land_MaxDotProduct) return false;
+			return true;
+		}
+
+		private void ConfigureControllers ()
+		{
+			if (_controllersConfigured) return;
+
+			_controllers = new List<InputDevice>();
+			var desiredCharacteristics = InputDeviceCharacteristics.HeldInHand | InputDeviceCharacteristics.Controller;
+			InputDevices.GetDevicesWithCharacteristics(desiredCharacteristics, _controllers);
+			
+			if (_controllers.Count != 2)
 			{
-				_heroMotion.Lift();
+				_controllers.Clear();
 				return;
 			}
-
-			// Both hands forward: Fly
-			// Get a dot product of head forward and head to hand.
-			// If the value is greater than 0.5, should be pretty close to "forward."
-			Vector3 dirToLeft = (_leftHand.position - _head.position).normalized;
-			Vector3 dirToRight = (_rightHand.position - _head.position).normalized;
-			Vector3 forward = _head.forward;
-
-			if (Vector3.Dot(dirToLeft, forward) > DOT_FLY && Vector3.Dot(dirToRight, forward) > DOT_FLY)
+			
+			foreach (InputDevice device in _controllers)
 			{
-				_heroMotion.Fly(forward);
-				return;
+				Debug.Log(string.Format("GGJ_DEBUG Device name '{0}' has characteristics '{1}'", device.name, device.characteristics.ToString()));
 			}
 
-			// Hands held sideways and away from body: Land
-			// Get a dot product of world down and head to hand.
-			// Greater than 0.8 or 0.9 is probably right at the user's side,
-			// so check for less than 0.5 (45 degree angle or higher).
-			if (Vector3.Dot(dirToLeft, Vector3.down) < DOT_LAND && Vector3.Dot(dirToRight, Vector3.down) < DOT_LAND)
-			{
-				_heroMotion.Land();
-				return;
-			}
+			_controllersConfigured = true;
+		}
 
-			// If we can't determine a specific input, hover in place.
-			_heroMotion.Hover();
+		private bool GetPrimaryButton ()
+		{
+			foreach (InputDevice device in _controllers)
+			{
+				bool pressed = false;
+				if (device.TryGetFeatureValue(CommonUsages.primaryButton, out pressed) && pressed)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		private bool GetSecondaryButton ()
+		{
+			foreach (InputDevice device in _controllers)
+			{
+				bool pressed = false;
+				if (device.TryGetFeatureValue(CommonUsages.secondaryButton, out pressed) && pressed)
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 
 		protected void Awake ()
 		{
 			_heroMotion = GetComponent<HeroMotion>();
+			_leftHand = new HeroVrHand(_leftTransform, _headTransform);
+			_rightHand = new HeroVrHand(_rightTransform, _headTransform);
+		}
+
+		protected void Update ()
+		{
+			// Make sure our controllers are setup.
+			// Can't do this on Awake: they haven't been registered yet.
+			ConfigureControllers();
+
+			// Get primary axis input and check for rotation
+			float rotation = 0;
+			foreach (InputDevice device in _controllers)
+			{
+				Vector2 input = Vector2.zero;
+				if (device.TryGetFeatureValue(CommonUsages.primary2DAxis, out input))
+				{
+					Debug.Log("GGJ_DEBUG " + device.name + " " + input.ToString("F2"));
+					if (Mathf.Abs(input.x) > Mathf.Abs(rotation))
+					{
+						rotation = input.x;
+					}
+				}
+			}
+			if (Mathf.Abs(rotation) > 0.1f)
+			{
+				transform.Rotate(Vector3.up * rotation * MaxRotateSpeed * Time.deltaTime, Space.World);
+			}
+
+			// Toggle DebugUI on secondary button press in debug mode
+#if DEBUG
+			if (GetSecondaryButton())
+			{
+				if (_secondaryButtonDown == false)
+				{
+					DebugUI.Instance.Toggle();
+					_secondaryButtonDown = true;
+				}
+			}
+			else
+			{
+				_secondaryButtonDown = false;
+			}
+#endif
+
+			_leftHand.Process();
+			_rightHand.Process();
+			DebugUI.Instance.ShowLeftHand(_leftHand);
+			DebugUI.Instance.ShowRightHand(_rightHand);
+
+			bool boost = GetPrimaryButton();
+
+			// Lift if one hand is above the head
+			if (_leftHand.HeightAboveHead > Lift_AboveHeadDistance || _rightHand.HeightAboveHead > Lift_AboveHeadDistance)
+			{
+				_heroMotion.Lift(boost);
+				return;
+			}
+
+			// Both hands in front to fly
+			if (IsTryingToFly())
+			{
+				// Check for button press to see if there's a boost
+				_heroMotion.Fly(_headTransform.forward, boost);
+				return;
+			}
+
+			// Hands held sideways and away from body AND behind the head: Land
+			// Get a dot product of world down and head to hand.
+			// Greater than DOT_LAND is probably at rest by the user's side.
+			if (IsTryingToLand())
+			{
+				_heroMotion.Land(boost);
+				return;
+			}
+
+			// If we can't determine a specific input, hover in place.
+			_heroMotion.Hover();
 		}
 	}
 }
