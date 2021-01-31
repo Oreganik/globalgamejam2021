@@ -36,7 +36,8 @@ namespace Prototype
 
 		protected void Awake ()
 		{
-			if (Application.isEditor && _debugLoadTestTown)
+			//if (Application.isEditor && _debugLoadTestTown)
+			if (_debugLoadTestTown)
 			{
 				_sceneLoader = new SceneLoader("TestTown");
 			}
