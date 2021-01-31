@@ -14,8 +14,9 @@ namespace Prototype
 	{
 		public string Id;
 		public GameObject GiverPrefab;
-		public GameObject ReceiverPrefab;
 		public GameObject ItemPrefab;
+		public bool ReturnToOtherEntity;
+		public GameObject ReceiverPrefab;
 		public string GiverLocationId;
 		public string ReceiverLocationId;
 		public string ItemLocationId;

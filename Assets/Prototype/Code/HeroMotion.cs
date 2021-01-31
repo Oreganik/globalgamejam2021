@@ -15,6 +15,8 @@ namespace Prototype
 	{
 		private enum State { Idle, Fly, Land, Lift }
 
+		public static bool Enabled = true;
+
 		public static float MinHeight = 0.4f;
 		public static float AccelerationTime = 2;
 		public static float DecelerationTime = 1;
@@ -67,6 +69,12 @@ namespace Prototype
 
 		protected void FixedUpdate ()
 		{
+			if (Enabled == false)
+			{
+				_speed = 0;
+ 				return;
+			}
+
 			if (_state == State.Idle)
 			{
 				_speed += _acceleration * Time.fixedDeltaTime;

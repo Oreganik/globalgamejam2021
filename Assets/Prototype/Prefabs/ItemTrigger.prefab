@@ -53,10 +53,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3304001136815676928}
-  - component: {fileID: 3375966821522798926}
+  - component: {fileID: 2931157451359902758}
   - component: {fileID: 8075678493476028805}
   m_Layer: 10
-  m_Name: GiverTrigger
+  m_Name: ItemTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,7 +78,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3375966821522798926
+--- !u!114 &2931157451359902758
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -90,7 +90,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac5a4e067af4d9e44b7f914698052efe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _type: 0
+  _type: 1
 --- !u!54 &8075678493476028805
 Rigidbody:
   m_ObjectHideFlags: 0

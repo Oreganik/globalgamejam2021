@@ -18,6 +18,7 @@ namespace Prototype
 		protected void Awake ()
 		{
 			LocationDatabase.Register(this);
+			gameObject.name = "[Location] " + Id;
 		}
 	}
 }

@@ -15,52 +15,29 @@ namespace Prototype
 	{
 		public static QuestManager Instance;
 
-		public Quest[] _quests;
-		public GameObject _giverTriggerPrefab;
-
-		private GameObject _giver;
-		private GameObject _item;
-		private Quest _activeQuest;
-
-		public void Activate (string id)
+		public GameObject GiverTriggerPrefab
 		{
-			bool foundQuest = false;
-			foreach (Quest quest in _quests)
-			{
-				if (quest.Id.Equals(id))
-				{
-					Location location = LocationDatabase.Get(quest.GiverLocationId);
-					_giver = Instantiate(quest.GiverPrefab, location.transform.position, location.transform.rotation);
-
-					GameObject trigger = Instantiate(_giverTriggerPrefab, _giver.transform);
-					trigger.transform.localPosition = Vector3.zero;
-					trigger.transform.localRotation = Quaternion.identity;
-
-					Compass.Instance.SetTarget(_giver.transform);
-
-					foundQuest = true;
-					_activeQuest = quest;
-				}
-			}
-
-			if (foundQuest == false)
-			{
-				Debug.LogErrorFormat("Could not find quest id {0}", id);
-			}
+			get { return _giverTriggerPrefab; }
 		}
 
-		public void ShowQuestIntro ()
+		public GameObject ItemTriggerPrefab
 		{
-			Debug.Log(_activeQuest.IntroText);
-			StartQuest();
+			get { return _itemTriggerPrefab; }
 		}
 
-		public void StartQuest ()
+		public GameObject ReceiverTriggerPrefab
 		{
-			Location location = LocationDatabase.Get(_activeQuest.ItemLocationId);
-			_item = Instantiate(_activeQuest.ItemPrefab, location.transform.position, location.transform.rotation);
-			Compass.Instance.SetTarget(_item.transform);
+			get { return _receiverTriggerPrefab; }
 		}
+
+		#pragma warning disable 0649
+		[SerializeField] private Quest[] _quests;
+		[SerializeField] private GameObject _giverTriggerPrefab;
+		[SerializeField] private GameObject _itemTriggerPrefab;
+		[SerializeField] private GameObject _receiverTriggerPrefab;
+		#pragma warning restore 0649
+
+		private QuestInstance[] _questInstances;
 
 		protected void Awake ()
 		{
@@ -69,7 +46,16 @@ namespace Prototype
 
 		protected void Start ()
 		{
-			Activate("test");
+			// Initialize quests on start so locations can register themselves
+			_questInstances = new QuestInstance[_quests.Length];
+			GameObject questObject = null;
+			for (int i = 0; i < _quests.Length; i++)
+			{
+				questObject = new GameObject();
+				_questInstances[i] = questObject.AddComponent<QuestInstance>();
+				_questInstances[i].Initialize(_quests[i], this);
+				_questInstances[i].SetAvailable();
+			}
 		}
 	}
 }

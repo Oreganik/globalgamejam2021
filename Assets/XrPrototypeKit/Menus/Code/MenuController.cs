@@ -82,6 +82,7 @@ namespace XrPrototypeKit.Menus
 		protected MenuButton[] _menuIcons;
 
 		private bool _isInteractable;
+		private bool _wasButtonDownLastFrame;
 		private float _openTime;
 		private LayerMask _layerMask;
 		private MenuButton _clickedIcon;
@@ -387,27 +388,39 @@ namespace XrPrototypeKit.Menus
 				return;
 			}
 
-			// If our controller goes offline, unhover the active icon.
-			SixDofController device = SixDofControllerManager.Instance?.GetBestActiveDevice();
-			if(device == null)
+			Transform deviceTransform = null;
+
+			if (Prototype.HeroVrInput.Instance)
 			{
-				Debug.LogWarning("No device found. Unhovering everything.");
-				if(_hoveredIcon != null)
-				{
-					_hoveredIcon.Unhover();
-					_hoveredIcon = null;
-				}
-				return;
+				deviceTransform = Prototype.HeroVrInput.Instance.RightHandTransform;
+			}
+			else
+			{
+				deviceTransform = Camera.main.transform;
 			}
 
+			// // If our controller goes offline, unhover the active icon.
+			// SixDofController device = SixDofControllerManager.Instance?.GetBestActiveDevice();
+			// if(device == null)
+			// {
+			// 	Debug.LogWarning("No device found. Unhovering everything.");
+			// 	if(_hoveredIcon != null)
+			// 	{
+			// 		_hoveredIcon.Unhover();
+			// 		_hoveredIcon = null;
+			// 	}
+			// 	return;
+			// }
+			// Transform deviceTransform = device.transform;
+
 			// Detect the nearest hover target
-			Debug.DrawRay(device.transform.position, device.transform.position + (device.transform.forward * 1000), Color.blue, 0.02f);
+			Debug.DrawRay(deviceTransform.position, deviceTransform.position + (deviceTransform.forward * 1000), Color.blue, 0.02f);
 
 			RaycastHit hit;
 			MenuButton currentTarget = null;
 
 			// Scan for 3D physics colliders
-			if (Physics.Raycast(device.transform.position, device.transform.forward, out hit, 1000, _layerMask, QueryTriggerInteraction.Ignore))
+			if (Physics.Raycast(deviceTransform.position, deviceTransform.forward, out hit, 1000, _layerMask, QueryTriggerInteraction.Ignore))
 			{
 				currentTarget = hit.collider.GetComponentInParent<MenuButton>();
 			}
@@ -440,10 +453,24 @@ namespace XrPrototypeKit.Menus
 				}
 			}
 
-			if (_hoveredIcon != null && SixDofControllerManager.Instance.GetButtonPressedThisFrame(InputButton.Trigger))
+			bool buttonPress = false;
+
+			if (Prototype.HeroVrInput.Instance)
+			{
+				buttonPress = Prototype.HeroVrInput.Instance.GetPrimaryButton();
+			}
+			else
+			{
+				buttonPress = Input.GetMouseButton(0);
+			}
+
+			//if (_hoveredIcon != null && SixDofControllerManager.Instance.GetButtonPressedThisFrame(InputButton.Trigger))
+			if (_hoveredIcon != null && buttonPress && _wasButtonDownLastFrame == false)
 			{
 				HandleIconClick(_hoveredIcon);
 			}
+			
+			_wasButtonDownLastFrame = buttonPress;
 		}
 
 		private void SetOpenPercentage (float value)

@@ -96,7 +96,8 @@ namespace XrPrototypeKit.Menus
 			// Definitely remove if this cramps your style. (tbrown)
 #if UNITY_ANDROID || UNITY_IOS
 			// Icons have no Highlight state on mobile.
-			if (_state != State.Idle) return;
+			// THIS BREAKS OCULUS
+			//if (_state != State.Idle) return;
 #else
 			// This is an arbitrary rule for devices with 6dof pointers.
 			if (_state != State.Highlight) return;

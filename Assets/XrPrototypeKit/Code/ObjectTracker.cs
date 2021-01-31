@@ -13,13 +13,16 @@ namespace XrPrototypeKit
 		public bool _useWorldUp = true;
 		public Vector3 _offset = Vector3.forward;
 		public float _lerp = 0.01f;
+		public bool _fixedHeight = true;
 
 		private MenuManager _menuManager; // this needs to be refactored
 		private Transform _targetTransform;
 
 		public void MoveToLocation (float lerp)
 		{
-			Vector3 targetPosition = _targetTransform.position + _targetTransform.rotation * _offset;
+			Vector3 direction = _targetTransform.rotation * _offset;
+			Vector3 targetPosition = _targetTransform.position + direction;
+			if (_fixedHeight) targetPosition.y = _targetTransform.position.y;
 			transform.position = Vector3.Lerp(transform.position, targetPosition, lerp);
 			
 			if (_useWorldUp)

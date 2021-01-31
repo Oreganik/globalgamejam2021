@@ -14,6 +14,7 @@ namespace Prototype
 	/// </summary>
 	public class HeroVrInput : MonoBehaviour 
 	{
+		public static HeroVrInput Instance;
 
 		public static float Fly_MinDotProduct = 0.7f;
 		public static float Fly_MinDistanceHeadZ = 0.15f; // hands must be greater than this distance (6 inches) to trigger flight
@@ -22,6 +23,11 @@ namespace Prototype
 		/// <summary>How far above the eyeline (i.e. the camera) the hand must be to trigger Lift</summary>
 		public static float Lift_AboveHeadDistance = 0.15f; // 0.1m = 4 inches
 		public static float MaxRotateSpeed = 30; // degrees per second
+
+		public Transform RightHandTransform
+		{
+			get { return _rightTransform; }
+		}
 
 		public Transform _leftTransform;
 		public Transform _headTransform;
@@ -34,6 +40,19 @@ namespace Prototype
 		private HeroVrHand _leftHand;
 		private HeroVrHand _rightHand;
 
+		public bool GetPrimaryButton ()
+		{
+			foreach (InputDevice device in _controllers)
+			{
+				bool pressed = false;
+				if (device.TryGetFeatureValue(CommonUsages.primaryButton, out pressed) && pressed)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+		
 		private bool IsTryingToFly ()
 		{
 			if (_leftHand.DistanceHeadZ < Fly_MinDistanceHeadZ) return false;
@@ -74,19 +93,6 @@ namespace Prototype
 			_controllersConfigured = true;
 		}
 
-		private bool GetPrimaryButton ()
-		{
-			foreach (InputDevice device in _controllers)
-			{
-				bool pressed = false;
-				if (device.TryGetFeatureValue(CommonUsages.primaryButton, out pressed) && pressed)
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-
 		private bool GetSecondaryButton ()
 		{
 			foreach (InputDevice device in _controllers)
@@ -102,6 +108,7 @@ namespace Prototype
 
 		protected void Awake ()
 		{
+			Instance = this;
 			_heroMotion = GetComponent<HeroMotion>();
 			_leftHand = new HeroVrHand(_leftTransform, _headTransform);
 			_rightHand = new HeroVrHand(_rightTransform, _headTransform);

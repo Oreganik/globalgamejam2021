@@ -11,19 +11,24 @@ namespace Prototype
 	/// <summary>
 	/// 
 	/// </summary>
-	public class GiverTrigger : MonoBehaviour 
+	public class QuestTrigger : MonoBehaviour 
 	{
+		public enum Type { Giver, Item, Receiver }
+
+		public Type _type;
+
+		private QuestInstance _questInstance;
+
+		public void Initialize (QuestInstance questInstance)
+		{
+			_questInstance = questInstance;
+		}
+
 		protected void OnTriggerEnter (Collider collider)
 		{
 			if (collider.gameObject.layer == LayerMask.NameToLayer("Hero"))
 			{
-				Debug.Log("player entered");
-				QuestManager.Instance.ShowQuestIntro();
-				Destroy(gameObject);
-			}
-			else
-			{
-				Debug.Log("something else?");
+				_questInstance.HandleTrigger(_type);
 			}
 		}
 	}

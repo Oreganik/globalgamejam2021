@@ -17,7 +17,11 @@ namespace Prototype
 
 		public static Location Get (string id)
 		{
-			if (s_locationMap == null) return null;
+			if (s_locationMap == null) 
+			{
+				Debug.LogError("Nothing has been registered with LocationDatabase yet. Did you call this on Awake?");
+				return null;
+			}
 
 			Location location = null;
 			if (s_locationMap.TryGetValue(id, out location) == false)
