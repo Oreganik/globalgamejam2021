@@ -108,11 +108,6 @@ namespace Prototype
 			GoToState(State.Inactive);
 		}
 
-		public void StartQuest ()
-		{
-			GoToState(State.Search);
-		}
-
 		private void GoToState (State newState)
 		{
 			// Once the state is complete, do nothing else
@@ -152,6 +147,7 @@ namespace Prototype
 					break;
 
 				case State.Intro:
+					_questManager.HandleQuestStart(this);
 					HeroMotion.Enabled = false;
 					XrPrototypeKit.Menus.DialogMenuController.OpenOneOption("LOST!", _quest.IntroText, "Ok", () => 
 					{ 
@@ -196,6 +192,7 @@ namespace Prototype
 					break;
 
 				case State.Results:
+					_questManager.HandleQuestComplete(this);
 					GoToState(State.Complete);
 					break;
 

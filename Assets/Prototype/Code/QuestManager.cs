@@ -39,6 +39,25 @@ namespace Prototype
 
 		private QuestInstance[] _questInstances;
 
+		public void HandleQuestComplete (QuestInstance questInstance)
+		{
+			foreach (QuestInstance qi in _questInstances)
+			{
+				if (qi.IsComplete) continue;
+				qi.SetAvailable();
+			}
+		}
+
+		public void HandleQuestStart (QuestInstance questInstance)
+		{
+			foreach (QuestInstance qi in _questInstances)
+			{
+				if (qi.IsComplete) continue;
+				if (qi == questInstance) continue;
+				qi.SetUnavailable();
+			}
+		}
+
 		protected void Awake ()
 		{
 			Instance = this;
