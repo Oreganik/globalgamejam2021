@@ -184,6 +184,8 @@ namespace XrPrototypeKit.Menus
 			//_menuController.HideIconsExcept(this);
 			_menuController.DisableInteraction();
 
+			Prototype.Sounds.Play(Prototype.Sounds.Type.Button_Click);
+
 			if (_iconSelectEffect)
 			{
 				_iconSelectEffect.Play( () => 

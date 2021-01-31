@@ -149,6 +149,7 @@ namespace Prototype
 				case State.Intro:
 					_questManager.HandleQuestStart(this);
 					HeroMotion.Enabled = false;
+					Sounds.Play(Sounds.Type.Get_Quest);
 					XrPrototypeKit.Menus.DialogMenuController.OpenOneOption("LOST!", _quest.IntroText, "Ok", () => 
 					{ 
 						XrPrototypeKit.Menus.DialogMenuController.Close();
@@ -169,6 +170,8 @@ namespace Prototype
 					// Destroy the item object (this is currently confusing b/c it has no feedback)
 					Destroy(_itemObject);
 
+					Sounds.Play(Sounds.Type.Item_Pickup);
+
 					// Create a quest trigger for the receiver
 					Transform receiverTransform = _quest.ReturnToOtherEntity ? _receiverObject.transform : _giverObject.transform;
 					_triggerObject = Instantiate(_questManager.ReceiverTriggerPrefab, receiverTransform);
@@ -183,6 +186,7 @@ namespace Prototype
 				case State.Outro:
 					Compass.Instance.Hide();
 					HeroMotion.Enabled = false;
+					Sounds.Play(Sounds.Type.Music_Intro);
 					XrPrototypeKit.Menus.DialogMenuController.OpenOneOption("FOUND!", _quest.FinishText, "Ok", () => 
 					{ 
 						XrPrototypeKit.Menus.DialogMenuController.Close();

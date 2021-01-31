@@ -1,9 +1,9 @@
 {
     "m_SelectedDeviceId": "1WMHH823ZX0351",
     "m_SelectedPackage": {
-        "deviceId": "1WMHH823ZX0351",
-        "name": "com.GlobalGameJam.GGJ2021",
-        "processId": 17442,
+        "deviceId": "",
+        "name": "",
+        "processId": 0,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -13,18 +13,6 @@
             "name": "com.oculus.vrshell",
             "processId": 1807,
             "exited": false
-        },
-        {
-            "deviceId": "1WMHH823ZX0351",
-            "name": "com.GlobalGameJam.GGJ2021",
-            "processId": 12188,
-            "exited": true
-        },
-        {
-            "deviceId": "1WMHH823ZX0351",
-            "name": "com.GlobalGameJam.GGJ2021",
-            "processId": 13720,
-            "exited": true
         },
         {
             "deviceId": "1WMHH823ZX0351",
@@ -48,7 +36,13 @@
             "deviceId": "1WMHH823ZX0351",
             "name": "com.GlobalGameJam.GGJ2021",
             "processId": 17442,
-            "exited": false
+            "exited": true
+        },
+        {
+            "deviceId": "1WMHH823ZX0351",
+            "name": "com.GlobalGameJam.GGJ2021",
+            "processId": 19818,
+            "exited": true
         }
     ],
     "m_Tags": {

@@ -61,6 +61,7 @@ namespace Prototype
 			else
 			{
 				MenuManager.Instance.Open(MenuName.Title);
+				Sounds.Play(Sounds.Type.Music_Intro);
 				MenuManager.Instance.OnBeginClose += HandleMenuClose;
 			}
 		}
