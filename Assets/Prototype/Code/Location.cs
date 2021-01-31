@@ -13,7 +13,10 @@ namespace Prototype
 	/// </summary>
 	public class Location : MonoBehaviour 
 	{
-		public string Id;
+		public string Id
+		{
+			get { return gameObject.name; }
+		}
 
 		protected void Awake ()
 		{
