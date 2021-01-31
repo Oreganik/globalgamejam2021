@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90499d439b08f3e4ca6ddc93218bf78a, type: 3}
+  m_Name: TestQuest
+  m_EditorClassIdentifier: 
+  Id: test
+  GiverPrefab: {fileID: 9075938313502062992, guid: ef064acae36cb13438855f13baf280c2,
+    type: 3}
+  ReceiverPrefab: {fileID: 3631778265174101581, guid: f7aba5a6fbfb78240999fa83fa33c7c7,
+    type: 3}
+  ItemPrefab: {fileID: 9057275851266517675, guid: 1fd8b7f7a956d614d8367cd3e89082c4,
+    type: 3}
+  GiverLocationId: test_giver
+  ReceiverLocationId: test_receiver
+  ItemLocationId: test_item
+  IntroText: Hello
+  FinishText: Thank you

@@ -3,7 +3,7 @@
     "m_SelectedPackage": {
         "deviceId": "1WMHH823ZX0351",
         "name": "com.GlobalGameJam.GGJ2021",
-        "processId": 31389,
+        "processId": 32642,
         "exited": true
     },
     "m_SelectedPriority": 0,
@@ -48,6 +48,12 @@
             "deviceId": "1WMHH823ZX0351",
             "name": "com.GlobalGameJam.GGJ2021",
             "processId": 31389,
+            "exited": true
+        },
+        {
+            "deviceId": "1WMHH823ZX0351",
+            "name": "com.GlobalGameJam.GGJ2021",
+            "processId": 32642,
             "exited": true
         }
     ],

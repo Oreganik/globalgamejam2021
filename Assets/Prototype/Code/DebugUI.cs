@@ -18,6 +18,7 @@ namespace Prototype
 
 		public Text _leftHandText;
 		public Text _rightHandText;
+		public Text _centerText;
 
 		private bool _isVisible;
 		private Transform _cameraTransform;
@@ -26,6 +27,12 @@ namespace Prototype
 		{
 			_leftHandText.text = string.Empty;
 			_rightHandText.text = string.Empty;
+			_centerText.text = string.Empty;
+		}
+
+		public void ShowCenter (string text)
+		{
+			_centerText.text = text;
 		}
 
 		public void ShowLeftHand (HeroVrHand hand)
