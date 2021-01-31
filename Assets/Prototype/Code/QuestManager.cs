@@ -39,6 +39,14 @@ namespace Prototype
 
 		private QuestInstance[] _questInstances;
 
+		public void MakeQuestsAvailable ()
+		{
+			foreach (QuestInstance quest in _questInstances)
+			{
+				quest.SetAvailable();
+			}
+		}
+
 		public void HandleQuestComplete (QuestInstance questInstance)
 		{
 			foreach (QuestInstance qi in _questInstances)
@@ -73,7 +81,6 @@ namespace Prototype
 				questObject = new GameObject();
 				_questInstances[i] = questObject.AddComponent<QuestInstance>();
 				_questInstances[i].Initialize(_quests[i], this);
-				_questInstances[i].SetAvailable();
 			}
 		}
 	}

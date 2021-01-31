@@ -69,6 +69,11 @@ namespace XrPrototypeKit.Menus
 			get { return _menuId; }
 		}
 
+		public MenuName MenuName
+		{
+			get { return _menuName; }
+		}
+
 		private static List<RaycastResult> s_raycastResults;
 
 		#pragma warning disable 0649
@@ -82,7 +87,6 @@ namespace XrPrototypeKit.Menus
 		protected MenuButton[] _menuIcons;
 
 		private bool _isInteractable;
-		private bool _wasButtonDownLastFrame;
 		private float _openTime;
 		private LayerMask _layerMask;
 		private MenuButton _clickedIcon;
@@ -453,24 +457,11 @@ namespace XrPrototypeKit.Menus
 				}
 			}
 
-			bool buttonPress = false;
-
-			if (Prototype.HeroVrInput.Instance)
-			{
-				buttonPress = Prototype.HeroVrInput.Instance.GetPrimaryButton();
-			}
-			else
-			{
-				buttonPress = Input.GetMouseButton(0);
-			}
-
 			//if (_hoveredIcon != null && SixDofControllerManager.Instance.GetButtonPressedThisFrame(InputButton.Trigger))
-			if (_hoveredIcon != null && buttonPress && _wasButtonDownLastFrame == false)
+			if (_hoveredIcon != null && Prototype.Session.GetClick())
 			{
 				HandleIconClick(_hoveredIcon);
 			}
-			
-			_wasButtonDownLastFrame = buttonPress;
 		}
 
 		private void SetOpenPercentage (float value)

@@ -7,6 +7,14 @@ namespace XrPrototypeKit.Menus
 		PREVIOUS,
 		CUSTOM,
 		Home,
-		Dialog
+		Dialog,
+		Title,
+		TutorialMenu,
+		HowToBoost,
+		HowToDescend,
+		HowToFly,
+		HowToRise,
+		HowToTurn,
+		Goals
 	}
 }

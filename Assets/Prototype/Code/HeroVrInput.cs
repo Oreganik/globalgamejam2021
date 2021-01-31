@@ -16,6 +16,11 @@ namespace Prototype
 	{
 		public static HeroVrInput Instance;
 
+		public bool GetClick
+		{
+			get { return GetPrimaryButton() && _primaryButtonDownLastFrame == false; }
+		}
+
 		public static float Fly_MinDotProduct = 0.7f;
 		public static float Fly_MinDistanceHeadZ = 0.15f; // hands must be greater than this distance (6 inches) to trigger flight
 		public static float Land_MaxHeadZ = 0.1f; // so, "behind the head" is greater than zero to feel better
@@ -34,6 +39,7 @@ namespace Prototype
 		public Transform _rightTransform;
 
 		private bool _controllersConfigured;
+		private bool _primaryButtonDownLastFrame;
 		private bool _secondaryButtonDown;
 		private List<InputDevice> _controllers;
 		private HeroMotion _heroMotion;
@@ -112,6 +118,11 @@ namespace Prototype
 			_heroMotion = GetComponent<HeroMotion>();
 			_leftHand = new HeroVrHand(_leftTransform, _headTransform);
 			_rightHand = new HeroVrHand(_rightTransform, _headTransform);
+		}
+
+		protected void LateUpdate ()
+		{
+			_primaryButtonDownLastFrame = GetPrimaryButton();
 		}
 
 		protected void Update ()

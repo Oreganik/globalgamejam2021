@@ -2,6 +2,7 @@
 // Shaquan Ladson & Ted Brown
 
 using Jambox;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,6 +18,10 @@ namespace Prototype
 
 		public static bool Enabled = true;
 
+		public static Action<float> OnFly;
+		public static Action<float> OnLand;
+		public static Action<float> OnLift;
+
 		public static float MinHeight = 0.4f;
 		public static float AccelerationTime = 2;
 		public static float DecelerationTime = 1;
@@ -30,13 +35,14 @@ namespace Prototype
 		private float _acceleration;
 		private float _speed;
 		private float _targetSpeed;
+		private float _timeInState;
 		private State _state;
 		private Vector3 _direction;
 		private Vector3 _targetDirection;
 
 		public void Fly (Vector3 direction, bool boost)
 		{
-			_state = State.Fly;
+			ChangeState(State.Fly);
 			_targetDirection = direction.normalized;
 			_targetSpeed = boost ? FlySpeedBoost : FlySpeedNormal;
 			_acceleration = _targetSpeed / AccelerationTime;
@@ -46,14 +52,14 @@ namespace Prototype
 		{
 			// don't re-enter the same state when hovering, as it breaks the acceleration
 			if (_state == State.Idle) return;
-			_state = State.Idle;
+			ChangeState(State.Idle);
 			_targetSpeed = 0;
 			_acceleration = -_speed / DecelerationTime;
 		}
 
 		public void Land (bool boost)
 		{
-			_state = State.Land;
+			ChangeState(State.Land);
 			_targetDirection = Vector3.down;
 			_targetSpeed = boost ? LandSpeedBoost : LandSpeed;
 			_acceleration = _targetSpeed / AccelerationTime;
@@ -61,10 +67,17 @@ namespace Prototype
 
 		public void Lift (bool boost)
 		{
-			_state = State.Lift;
+			ChangeState(State.Lift);
 			_targetDirection = Vector3.up;
 			_targetSpeed = boost ? LiftSpeedBoost : LiftSpeed;
 			_acceleration = _targetSpeed / AccelerationTime;
+		}
+
+		private void ChangeState (State newState)
+		{
+			if (_state == newState) return;
+			_state = newState;
+			_timeInState = 0;
 		}
 
 		protected void FixedUpdate ()
@@ -92,6 +105,25 @@ namespace Prototype
 				Vector3 p = transform.position;
 				p.y = MinHeight;
 				transform.position = p;
+			}
+		}
+
+		protected void Update ()
+		{
+			_timeInState += Time.deltaTime;
+
+			// broadcast time in state for tutorial demos
+			switch (_state)
+			{
+				case State.Fly:
+					if (OnFly != null) OnFly(_timeInState);
+					break;
+				case State.Land:
+					if (OnLand != null) OnLand(_timeInState);
+					break;
+				case State.Lift:
+					if (OnLift != null) OnLift(_timeInState);
+					break;
 			}
 		}
 	}

@@ -13,7 +13,15 @@ namespace Prototype
 	/// </summary>
 	public class HeroPcInput : MonoBehaviour 
 	{
+		public static HeroPcInput Instance; 
+
+		public bool GetClick
+		{
+			get { return Input.GetMouseButton(0) && _primaryButtonDownLastFrame == false; }
+		}
+
 		private bool _hasFocus;
+		private bool _primaryButtonDownLastFrame;
 		private HeroMotion _heroMotion;
 		private Transform _cameraTransform;
 
@@ -66,7 +74,7 @@ namespace Prototype
 
 			RotateCamera();
 
-			if (Input.GetMouseButtonDown(2))
+			if (Input.GetMouseButtonDown(2) && Application.isEditor)
 			{
 				DebugUI.Instance.Toggle();
 			}
@@ -91,8 +99,14 @@ namespace Prototype
 			}
 		}
 
+		protected void LateUpdate ()
+		{
+			_primaryButtonDownLastFrame = Input.GetMouseButton(0);
+		}
+
 		protected void Awake ()
 		{
+			Instance= this;
 			_cameraTransform = Camera.main.transform;
 			_heroMotion = GetComponent<HeroMotion>();
 			SetFocus(true);
