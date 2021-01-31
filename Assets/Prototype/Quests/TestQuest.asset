@@ -14,8 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: test
   GiverPrefab: {fileID: 0}
-  ItemPrefab: {fileID: 9057275851266517675, guid: 1fd8b7f7a956d614d8367cd3e89082c4,
-    type: 3}
+  ItemPrefab: {fileID: 0}
   ReturnToOtherEntity: 0
   ReceiverPrefab: {fileID: 3631778265174101581, guid: f7aba5a6fbfb78240999fa83fa33c7c7,
     type: 3}
