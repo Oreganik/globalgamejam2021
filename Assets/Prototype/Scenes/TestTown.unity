@@ -48722,6 +48722,8 @@ MonoBehaviour:
     type: 3}
   _receiverTriggerPrefab: {fileID: 8154840224717606960, guid: af4e3eaf338884b479b2ab693d2f38e9,
     type: 3}
+  _defaultCitizenPrefab: {fileID: 1867245525528706531, guid: acb8147ae633def469b14fb2102de10c,
+    type: 3}
 --- !u!4 &1770749393
 Transform:
   m_ObjectHideFlags: 0

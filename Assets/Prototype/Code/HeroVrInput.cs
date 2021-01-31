@@ -6,6 +6,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
+using XrPrototypeKit.Menus;
+using UnityEngine.XR.Interaction.Toolkit;
 
 namespace Prototype
 {
@@ -18,7 +20,7 @@ namespace Prototype
 
 		public bool GetClick
 		{
-			get { return GetPrimaryButton() && _primaryButtonDownLastFrame == false; }
+			get { return (GetPrimaryButton() || GetTrigger()) && _primaryButtonDownLastFrame == false; }
 		}
 
 		public static float Fly_MinDotProduct = 0.7f;
@@ -37,6 +39,7 @@ namespace Prototype
 		public Transform _leftTransform;
 		public Transform _headTransform;
 		public Transform _rightTransform;
+		public XRInteractorLineVisual[] _interactorLines;
 
 		private bool _controllersConfigured;
 		private bool _primaryButtonDownLastFrame;
@@ -57,6 +60,35 @@ namespace Prototype
 				}
 			}
 			return false;
+		}
+
+		public bool GetTrigger ()
+		{
+			foreach (InputDevice device in _controllers)
+			{
+				bool pressed = false;
+				if (device.TryGetFeatureValue(CommonUsages.triggerButton, out pressed) && pressed)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public void HideLineRenderers ()
+		{
+			foreach (XRInteractorLineVisual line in _interactorLines)
+			{
+				line.enabled = false;
+			}
+		}
+
+		public void ShowLineRenderers ()
+		{
+			foreach (XRInteractorLineVisual line in _interactorLines)
+			{
+				line.enabled = true;
+			}
 		}
 		
 		private bool IsTryingToFly ()
@@ -112,17 +144,44 @@ namespace Prototype
 			return false;
 		}
 
+		private void HandleOpenMenu (MenuController menuController)
+		{
+			ShowLineRenderers();
+		}
+
+		private void HandleMenuClose ()
+		{
+			HideLineRenderers();
+		}
+
 		protected void Awake ()
 		{
 			Instance = this;
 			_heroMotion = GetComponent<HeroMotion>();
 			_leftHand = new HeroVrHand(_leftTransform, _headTransform);
 			_rightHand = new HeroVrHand(_rightTransform, _headTransform);
+			HideLineRenderers();
 		}
 
 		protected void LateUpdate ()
 		{
-			_primaryButtonDownLastFrame = GetPrimaryButton();
+			_primaryButtonDownLastFrame = (GetPrimaryButton() || GetTrigger());
+		}
+
+		protected void OnDestroy ()
+		{
+			if (MenuManager.Instance)
+			{
+				MenuManager.Instance.OnBeginClose -= HandleMenuClose;
+			}
+			MenuManager.OnOpenSubMenu -= HandleOpenMenu;
+		}
+
+		protected void Start ()
+		{
+			// static + instances, I know, bad form. :)
+			MenuManager.OnOpenSubMenu += HandleOpenMenu;
+			MenuManager.Instance.OnBeginClose += HandleMenuClose;
 		}
 
 		protected void Update ()
@@ -171,7 +230,7 @@ namespace Prototype
 			DebugUI.Instance.ShowLeftHand(_leftHand);
 			DebugUI.Instance.ShowRightHand(_rightHand);
 
-			bool boost = GetPrimaryButton();
+			bool boost = GetPrimaryButton() || GetTrigger();
 
 			// Lift if one hand is above the head
 			if (_leftHand.HeightAboveHead > Lift_AboveHeadDistance || _rightHand.HeightAboveHead > Lift_AboveHeadDistance)

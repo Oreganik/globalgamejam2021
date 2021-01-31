@@ -35,6 +35,7 @@ namespace Prototype
 		[SerializeField] private GameObject _giverTriggerPrefab;
 		[SerializeField] private GameObject _itemTriggerPrefab;
 		[SerializeField] private GameObject _receiverTriggerPrefab;
+		[SerializeField] private GameObject _defaultCitizenPrefab;
 		#pragma warning restore 0649
 
 		private QuestInstance[] _questInstances;
@@ -80,6 +81,17 @@ namespace Prototype
 			{
 				questObject = new GameObject();
 				_questInstances[i] = questObject.AddComponent<QuestInstance>();
+				
+				if (_quests[i].GiverPrefab == null)
+				{
+					_quests[i].GiverPrefab = _defaultCitizenPrefab;
+				}
+
+				if (_quests[i].ReceiverPrefab == null)
+				{
+					_quests[i].ReceiverPrefab = _defaultCitizenPrefab;
+				}
+
 				_questInstances[i].Initialize(_quests[i], this);
 			}
 		}

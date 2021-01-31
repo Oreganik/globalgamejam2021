@@ -13,13 +13,11 @@ MonoBehaviour:
   m_Name: BetaQuest
   m_EditorClassIdentifier: 
   Id: beta
-  GiverPrefab: {fileID: 9075938313502062992, guid: ef064acae36cb13438855f13baf280c2,
-    type: 3}
+  GiverPrefab: {fileID: 0}
   ItemPrefab: {fileID: 9057275851266517675, guid: 1fd8b7f7a956d614d8367cd3e89082c4,
     type: 3}
   ReturnToOtherEntity: 1
-  ReceiverPrefab: {fileID: 3631778265174101581, guid: f7aba5a6fbfb78240999fa83fa33c7c7,
-    type: 3}
+  ReceiverPrefab: {fileID: 0}
   GiverLocationId: beta_giver
   ReceiverLocationId: beta_receiver
   ItemLocationId: beta_item

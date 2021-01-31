@@ -3,8 +3,8 @@
     "m_SelectedPackage": {
         "deviceId": "1WMHH823ZX0351",
         "name": "com.GlobalGameJam.GGJ2021",
-        "processId": 32642,
-        "exited": true
+        "processId": 17442,
+        "exited": false
     },
     "m_SelectedPriority": 0,
     "m_KnownPackagesForSerialization": [
@@ -17,44 +17,38 @@
         {
             "deviceId": "1WMHH823ZX0351",
             "name": "com.GlobalGameJam.GGJ2021",
-            "processId": 22895,
+            "processId": 12188,
             "exited": true
         },
         {
             "deviceId": "1WMHH823ZX0351",
             "name": "com.GlobalGameJam.GGJ2021",
-            "processId": 23947,
+            "processId": 13720,
             "exited": true
         },
         {
             "deviceId": "1WMHH823ZX0351",
             "name": "com.GlobalGameJam.GGJ2021",
-            "processId": 25027,
+            "processId": 14969,
             "exited": true
         },
         {
             "deviceId": "1WMHH823ZX0351",
             "name": "com.GlobalGameJam.GGJ2021",
-            "processId": 26545,
+            "processId": 15602,
             "exited": true
         },
         {
             "deviceId": "1WMHH823ZX0351",
             "name": "com.GlobalGameJam.GGJ2021",
-            "processId": 29532,
+            "processId": 16553,
             "exited": true
         },
         {
             "deviceId": "1WMHH823ZX0351",
             "name": "com.GlobalGameJam.GGJ2021",
-            "processId": 31389,
-            "exited": true
-        },
-        {
-            "deviceId": "1WMHH823ZX0351",
-            "name": "com.GlobalGameJam.GGJ2021",
-            "processId": 32642,
-            "exited": true
+            "processId": 17442,
+            "exited": false
         }
     ],
     "m_Tags": {
@@ -107,7 +101,7 @@
         "MemoryGroup": 1,
         "Behavior": 1
     },
-    "m_Filter": "GGJ_DEBUG",
+    "m_Filter": "Unity",
     "m_FilterIsRegularExpression": false,
     "m_SymbolPaths": []
 }
