@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: TestQuest
   m_EditorClassIdentifier: 
   Id: test
-  GiverPrefab: {fileID: 9075938313502062992, guid: ef064acae36cb13438855f13baf280c2,
-    type: 3}
+  GiverPrefab: {fileID: 0}
   ItemPrefab: {fileID: 9057275851266517675, guid: 1fd8b7f7a956d614d8367cd3e89082c4,
     type: 3}
   ReturnToOtherEntity: 0

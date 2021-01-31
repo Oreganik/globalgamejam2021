@@ -24,5 +24,10 @@ namespace Jambox
 			}
 			return Color.black;
 		}
+
+		public Color GetRandom ()
+		{
+			return GetColor(Random.Range(0, Colors.Length));
+		}
 	}
 }
