@@ -13,13 +13,15 @@ MonoBehaviour:
   m_Name: quest1
   m_EditorClassIdentifier: 
   Id: alpha
-  GiverPrefab: {fileID: 0}
-  ItemPrefab: {fileID: 0}
+  GiverPrefab: {fileID: 1867245525528706531, guid: acb8147ae633def469b14fb2102de10c,
+    type: 3}
+  ItemPrefab: {fileID: 9057275851266517675, guid: 97477f70c53087b4fa852b1a335c9d7f,
+    type: 3}
   ReturnToOtherEntity: 0
   ReceiverPrefab: {fileID: 3631778265174101581, guid: f7aba5a6fbfb78240999fa83fa33c7c7,
     type: 3}
-  GiverLocationId: alpha_start
+  GiverLocationId: alpha_giver
   ReceiverLocationId: test_receiver
-  ItemLocationId: alpha_end
+  ItemLocationId: alpha_item
   IntroText: Meow!
   FinishText: Kitty! Let's go home!
